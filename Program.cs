@@ -2,9 +2,8 @@
 using System.IO;
 using System.Text;
 using System.Reflection;
-using Criador.Bisteca;
 
-namespace Criador
+namespace ConsoleMenu
 {
     class Program
     {
@@ -12,8 +11,7 @@ namespace Criador
         static string path = Directory.GetCurrentDirectory();
         public static void Main()
         {
-            var visor = new Visor();
-            visor.Opcoes();
+           Visor.Opcoes();
         }
     }
 }

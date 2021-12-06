@@ -3,14 +3,13 @@ using System.IO;
 using System.Text;
 using System.Reflection;
 
-namespace Criador.Bisteca
+namespace ConsoleMenu
 {
     public class Visor
     {
-        public static Visor teste;
-        public static string arquivoEscolhido = @"\teste.txt";
-        public static string path = Directory.GetCurrentDirectory();
-        public void Opcoes()
+        static string? arquivoEscolhido;
+        static string path = Directory.GetCurrentDirectory();
+        public static void Opcoes()
         {
             try
             {
@@ -28,6 +27,7 @@ namespace Criador.Bisteca
             }
             catch (System.Exception ex)
             {
+                Console.WriteLine(2);
                 throw new Exception(ex.Message);
             }
         }
@@ -51,18 +51,51 @@ namespace Criador.Bisteca
                     case "4":
                         alteraArquivo();
                         break;
+                    case "5":
+                        insereCep();
+                        break;
                     default:
                         retornarMenu("Escolha uma opção valida.", true);
-                        teste.Opcoes();
+                        Opcoes();
                         break;
                 }
             }
             catch (System.Exception ex)
             {
+
+                Console.WriteLine(1);
                 throw new Exception(ex.Message);
             }
         }
         #region Funções Switch
+        static void insereCep()
+        {
+            Console.WriteLine("Como deseja inserir informações ao arquivo?");
+            criaLinha();
+            Console.WriteLine("[1] Digitar Cep\n" +
+           "[2] Cep aleatório");
+            criaLinha();
+            Console.Write("Digite a opção desejada: ");
+            string? escolha = Console.ReadLine();
+            Console.Clear();
+            criaLinha();
+            switch (escolha)
+            {
+                case "1":
+                    Console.Write("Digite o Cep: ");
+                    string? cep = Console.ReadLine();
+                    if (cep != string.Empty && cep.Length == 8)
+                    {
+                        ApiViaCEP.ApiViaCEP.Chama(cep);
+                    }
+                    break;
+                case "2":
+                    break;
+                default:
+                    break;
+            }
+
+        }
         static void criaArquivo()
         {
             Console.Write("Digite um nome para o arquivo: ");
@@ -70,51 +103,65 @@ namespace Criador.Bisteca
             if (File.Exists(path + arquivoEscolhido))
             {
                 retornarMenu("Já existe um arquivo come este nome.", true);
-                teste.Opcoes();
+                Opcoes();
             }
             else
             {
                 var arquivo = new StreamWriter(path + arquivoEscolhido, true); // cria ou abre
                 arquivo.Close();
                 retornarMenu("Arquivo criado com sucesso.", true);
-                teste.Opcoes();
+                Opcoes();
             }
         }
         static void insereDados()
         {
             var valor = new StreamWriter(path + arquivoEscolhido, true); // abre ou cria
-            Console.Write("Digite algo: ");
-            valor.WriteLine(Console.ReadLine());
+            Console.Write("Digite um Cep: ");
+            // var cep = new ApiViaCEP();
+            // cep.Chama(Console.ReadLine());
+            valor.WriteLine();
             valor.Close();
-            if (retornarMenu("Deseja escrever algo mais? <s/n>"))
+            if (retornarMenu("Deseja escrever novamente? <s/n>"))
                 Acao("2");
             else
-                teste.Opcoes();
+                Opcoes();
         }
         static void visualizaArquivo()
         {
-            string text = System.IO.File.ReadAllText(path + arquivoEscolhido);
-            Console.Write(text);
-            if (retornarMenu("Retornar? <s/n>"))
-                teste.Opcoes();
+            if (arquivoEscolhido != null)
+            {
+                string text = System.IO.File.ReadAllText(path + arquivoEscolhido);
+                Console.Write(text);
+                if (retornarMenu("Retornar? <s/n>"))
+                    Opcoes();
+            }
+            else
+            {
+                if (retornarMenu("Nenhum arquivo selecioinado.", true))
+                    Console.Write("text");
+                else
+                {
+                    Opcoes();
+                }
+            }
         }
         static void alteraArquivo()
         {
             Console.Write("Digite o nome do arquivo: ");
             arquivoEscolhido = @$"\{Console.ReadLine()}.txt";
             if (File.Exists(path + arquivoEscolhido))
-                teste.Opcoes();
+                Opcoes();
             else
                 Console.Clear();
             arquivoEscolhido = @"\Teste.txt";
             if (retornarMenu("O arquivo não existe, deseja criá-lo? <s/n>"))
                 Acao("1");
             else
-                teste.Opcoes();
+                Opcoes();
         }
         #endregion
         #region Funções Comuns
-        static void criaLinha(int repeticoes = 24, char simbolo = '=')
+        public static void criaLinha(int repeticoes = 24, char simbolo = '=')
         {
             var store = new StringBuilder(repeticoes);
             int index = 0;
@@ -125,7 +172,7 @@ namespace Criador.Bisteca
             }
             Console.WriteLine(store.ToString());
         }
-        static bool retornarMenu(string msg = "Ok", bool read = false)
+        public static bool retornarMenu(string msg = "Ok", bool read = false)
         {
             criaLinha();
             Console.WriteLine(msg + (read ? "\nPressione qualquer tecla para continuar." : string.Empty));
