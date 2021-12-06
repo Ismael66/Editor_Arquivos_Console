@@ -20,7 +20,8 @@ namespace ConsoleMenu
                 Console.WriteLine("[1] Criar arquivo\n" +
                 "[2] Inserir dados no arquivo\n" +
                 "[3] Visualizar arquivo\n" +
-                "[4] Alterar arquivo selecionado");
+                "[4] Alterar arquivo selecionado\n" +
+                "[5] Resgatar dados por Cep");
                 criaLinha();
                 Console.Write("Digite a opção desejada: ");
                 Acao(Console.ReadLine());
@@ -68,34 +69,6 @@ namespace ConsoleMenu
             }
         }
         #region Funções Switch
-        static void insereCep()
-        {
-            Console.WriteLine("Como deseja inserir informações ao arquivo?");
-            criaLinha();
-            Console.WriteLine("[1] Digitar Cep\n" +
-           "[2] Cep aleatório");
-            criaLinha();
-            Console.Write("Digite a opção desejada: ");
-            string? escolha = Console.ReadLine();
-            Console.Clear();
-            criaLinha();
-            switch (escolha)
-            {
-                case "1":
-                    Console.Write("Digite o Cep: ");
-                    string? cep = Console.ReadLine();
-                    if (cep != string.Empty && cep.Length == 8)
-                    {
-                        ApiViaCEP.ApiViaCEP.Chama(cep);
-                    }
-                    break;
-                case "2":
-                    break;
-                default:
-                    break;
-            }
-
-        }
         static void criaArquivo()
         {
             Console.Write("Digite um nome para o arquivo: ");
@@ -158,6 +131,56 @@ namespace ConsoleMenu
                 Acao("1");
             else
                 Opcoes();
+        }
+        static void insereCep()
+        {
+            Console.Clear();
+            Console.WriteLine("Como deseja inserir informações ao arquivo?");
+            criaLinha();
+            Console.WriteLine("[1] Digitar Cep\n" +
+           "[2] Cep aleatório");
+            criaLinha();
+            Console.Write("Digite a opção desejada: ");
+            string? escolha = Console.ReadLine();
+            Console.Clear();
+            criaLinha();
+            switch (escolha)
+            {
+                case "1":
+                    cepDigitado();
+                    break;
+                case "2":
+                    cepAleatorio();
+                    break;
+                default:
+                    criaLinha();
+                    if (!retornarMenu("Digite uma opção valida.", true))
+                        insereCep();
+                    break;
+            }
+        }
+        #endregion
+        #region Funções Switch Cep
+        static void cepDigitado()
+        {
+            Console.Write("Digite o Cep: ");
+            string? cep = Console.ReadLine();
+            if (cep != string.Empty && cep.Length == 8)
+                ApiViaCEP.ApiViaCEP.Chama(cep);
+            else
+            {
+                criaLinha();
+                if (!retornarMenu("Cep inválido.", true))
+                    insereCep();
+            }
+        }
+        static void cepAleatorio()
+        {
+            int[] arrayCeps = new int[10] { 58410140, 58400440, 69550061, 85815210, 69313265, 57307004, 64013100,
+                    97577470, 64050080, 78058150};
+            Random random = new Random();
+            int cepAleatorio = arrayCeps[random.Next(arrayCeps.Length)];
+            ApiViaCEP.ApiViaCEP.Chama(cepAleatorio.ToString());
         }
         #endregion
         #region Funções Comuns

@@ -12,8 +12,8 @@ namespace ConsoleMenu.ApiViaCEP
             {
                 Rodar(cep);
                 System.Threading.Thread.Sleep(3000);
-                Console.ReadLine();
-                // Visor.retornarMenu("", true);
+                Console.ReadKey();
+                Visor.Opcoes();
             }
             catch (Exception ex)
             {
@@ -67,6 +67,8 @@ namespace ConsoleMenu.ApiViaCEP
             if (validador.Contains('7')) Console.WriteLine($"GIA: {campo.GIA}");
             if (validador.Contains('8')) Console.WriteLine($"DDD: {campo.DDD}");
             if (validador.Contains('9')) Console.WriteLine($"Siafi: {campo.Siafi}");
+            Visor.criaLinha();
+            Console.WriteLine("Pressione qualquer tecla para continuar");
         }
     }
 }
