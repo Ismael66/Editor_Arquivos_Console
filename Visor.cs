@@ -121,8 +121,8 @@ namespace ConsoleMenu
             {
                 string text = System.IO.File.ReadAllText(path + arquivoEscolhido);
                 Console.Write(text);
-                if (!retornarMenu("Arquivo aberto com suceeso", true))
-                    Opcoes();
+                retornarMenu("Arquivo aberto com suceeso", true);
+                Opcoes();
             }
             else
             {
