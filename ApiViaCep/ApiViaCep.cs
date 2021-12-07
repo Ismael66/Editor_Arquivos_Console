@@ -48,7 +48,8 @@ namespace ConsoleMenu.ApiViaCEP
             "[6] IBGE\n" +
             "[7] GIA\n" +
             "[8] DDD\n" +
-            "[9] Siafi");
+            "[9] Siafi\n" +
+            "[0] Todos os dados");
             Visor.criaLinha();
             Console.WriteLine("Quais informações deseja resgatar?");
         }
@@ -60,6 +61,10 @@ namespace ConsoleMenu.ApiViaCEP
             Console.WriteLine($"Cep: {campo.Cep}");
             arquivo.WriteLine($"=> Cep: {campo.Cep}");
             Visor.criaLinha();
+            if (validador.Contains('0'))
+            {
+                validador = "123456789";
+            }
             if (validador.Contains('1'))
             {
                 Console.WriteLine($"Logradouro: {campo.Logradouro}");
