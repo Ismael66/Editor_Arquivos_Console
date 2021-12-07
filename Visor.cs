@@ -21,7 +21,7 @@ namespace ConsoleMenu
                 "[2] Inserir dados no arquivo\n" +
                 "[3] Visualizar arquivo\n" +
                 "[4] Alterar arquivo selecionado\n" +
-                "[5] Resgatar dados por Cep\n"+
+                "[5] Resgatar dados por Cep\n" +
                 "[6] Sair do programa");
                 criaLinha();
                 Console.Write("Digite a opção desejada: ");
@@ -29,7 +29,6 @@ namespace ConsoleMenu
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine(2);
                 throw new Exception(ex.Message);
             }
         }
@@ -67,8 +66,6 @@ namespace ConsoleMenu
             }
             catch (System.Exception ex)
             {
-
-                Console.WriteLine(1);
                 throw new Exception(ex.Message);
             }
         }
@@ -182,24 +179,48 @@ namespace ConsoleMenu
         #region Funções Switch Cep
         static void cepDigitado()
         {
-            Console.Write("Digite o Cep: ");
-            string? cep = Console.ReadLine();
-            if (cep != string.Empty && cep.Length == 8)
-                ApiViaCEP.ApiViaCEP.Chama(cep);
+            if (File.Exists(path + arquivoEscolhido))
+            {
+                var valor = new StreamWriter(path + arquivoEscolhido, append: true);
+                Console.Write("Digite o Cep: ");
+                string? cep = Console.ReadLine();
+                if (cep != string.Empty && cep.Length == 8)
+                {
+                    ApiViaCEP.ApiViaCEP.Chama(cep, valor);
+                }
+                else
+                {
+                    criaLinha();
+                    if (!retornarMenu("Cep inválido.", true))
+                        insereCep();
+                }
+            }
             else
             {
-                criaLinha();
-                if (!retornarMenu("Cep inválido.", true))
-                    insereCep();
+                if (retornarMenu("Nenhum arquivo selecionado. Deseja selecionar?<s/n>"))
+                    Acao("4");
+                else
+                    Opcoes();
             }
         }
         static void cepAleatorio()
         {
-            int[] arrayCeps = new int[10] { 58410140, 58400440, 69550061, 85815210, 69313265, 57307004, 64013100,
+            if (File.Exists(path + arquivoEscolhido))
+            {
+                var valor = new StreamWriter(path + arquivoEscolhido, append: true);
+                int[] arrayCeps = new int[10] { 58410140, 58400440, 69550061, 85815210, 69313265, 57307004, 64013100,
                     97577470, 64050080, 78058150};
-            Random random = new Random();
-            int cepAleatorio = arrayCeps[random.Next(arrayCeps.Length)];
-            ApiViaCEP.ApiViaCEP.Chama(cepAleatorio.ToString());
+                Random random = new Random();
+                int cepAleatorio = arrayCeps[random.Next(arrayCeps.Length)];
+                ApiViaCEP.ApiViaCEP.Chama(cepAleatorio.ToString(), valor);
+            }
+            else
+            {
+                if (retornarMenu("Nenhum arquivo selecionado. Deseja selecionar?<s/n>"))
+                    Acao("4");
+                else
+                    Opcoes();
+            }
         }
         #endregion
         #region Funções Comuns
