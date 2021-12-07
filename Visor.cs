@@ -103,11 +103,11 @@ namespace ConsoleMenu
             }
             else
             {
+                criaLinha();
                 var valor = new StreamWriter(path + arquivoEscolhido, true); // abre ou cria
-                Console.Write("Digite um Cep: ");
-                // var cep = new ApiViaCEP();
-                // cep.Chama(Console.ReadLine());
-                valor.WriteLine();
+                Console.WriteLine("Digite a informação que deseja guardar no arquivo.");
+                string? informacao = Console.ReadLine();
+                valor.WriteLine(informacao);
                 valor.Close();
                 if (retornarMenu("Deseja escrever novamente? <s/n>"))
                     Acao("2");
