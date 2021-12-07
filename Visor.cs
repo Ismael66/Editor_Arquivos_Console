@@ -21,7 +21,8 @@ namespace ConsoleMenu
                 "[2] Inserir dados no arquivo\n" +
                 "[3] Visualizar arquivo\n" +
                 "[4] Alterar arquivo selecionado\n" +
-                "[5] Resgatar dados por Cep");
+                "[5] Resgatar dados por Cep\n"+
+                "[6] Sair do programa");
                 criaLinha();
                 Console.Write("Digite a opção desejada: ");
                 Acao(Console.ReadLine());
@@ -54,6 +55,9 @@ namespace ConsoleMenu
                         break;
                     case "5":
                         insereCep();
+                        break;
+                    case "6":
+                        Environment.Exit(0);
                         break;
                     default:
                         retornarMenu("Escolha uma opção valida.", true);
