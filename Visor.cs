@@ -83,8 +83,8 @@ namespace ConsoleMenu
             {
                 var arquivo = new StreamWriter(path + arquivoEscolhido, true); // cria ou abre
                 arquivo.Close();
-                retornarMenu("Arquivo criado com sucesso.", true);
-                Opcoes();
+                if (!retornarMenu("Arquivo criado com sucesso.", true))
+                    Opcoes();
             }
         }
         static void insereDados()
@@ -117,11 +117,11 @@ namespace ConsoleMenu
         }
         static void visualizaArquivo()
         {
-            if (arquivoEscolhido != null)
+            if (File.Exists(path + arquivoEscolhido))
             {
                 string text = System.IO.File.ReadAllText(path + arquivoEscolhido);
                 Console.Write(text);
-                if (retornarMenu("Retornar? <s/n>"))
+                if (!retornarMenu("Arquivo aberto com suceeso", true))
                     Opcoes();
             }
             else
