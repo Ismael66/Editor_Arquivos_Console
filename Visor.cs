@@ -8,7 +8,7 @@ namespace ConsoleMenu
     public class Visor
     {
         static string? arquivoEscolhido;
-        static string path = Directory.GetCurrentDirectory();
+        static string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         public static void Opcoes()
         {
             try
@@ -88,16 +88,31 @@ namespace ConsoleMenu
         }
         static void insereDados()
         {
-            var valor = new StreamWriter(path + arquivoEscolhido, true); // abre ou cria
-            Console.Write("Digite um Cep: ");
-            // var cep = new ApiViaCEP();
-            // cep.Chama(Console.ReadLine());
-            valor.WriteLine();
-            valor.Close();
-            if (retornarMenu("Deseja escrever novamente? <s/n>"))
-                Acao("2");
+            if (!File.Exists(path + arquivoEscolhido))
+            {
+                if (retornarMenu("Arquivo não existe. Deseja criar um novo arquivo?<s/n>"))
+                    Acao("1");
+                else
+                {
+                    if (retornarMenu("Deseja selecionar um arquivo já criado?<s/n>"))
+                        Acao("4");
+                    else
+                        Opcoes();
+                }
+            }
             else
-                Opcoes();
+            {
+                var valor = new StreamWriter(path + arquivoEscolhido, true); // abre ou cria
+                Console.Write("Digite um Cep: ");
+                // var cep = new ApiViaCEP();
+                // cep.Chama(Console.ReadLine());
+                valor.WriteLine();
+                valor.Close();
+                if (retornarMenu("Deseja escrever novamente? <s/n>"))
+                    Acao("2");
+                else
+                    Opcoes();
+            }
         }
         static void visualizaArquivo()
         {
