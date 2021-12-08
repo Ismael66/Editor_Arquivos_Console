@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Newtonsoft.Json;
 // using System.Linq
 
@@ -6,11 +7,11 @@ namespace ConsoleMenu.ApiViaCEP
 {
     public class ApiViaCEP
     {
-        public static void Chama(string cep, StreamWriter arquivo)
+        static ViaCep campo;
+        public static void Chama()
         {
             try
             {
-                Rodar(cep, arquivo);
                 System.Threading.Thread.Sleep(3000);
                 Console.ReadKey();
                 Visor.Opcoes();
@@ -20,15 +21,14 @@ namespace ConsoleMenu.ApiViaCEP
                 Console.WriteLine(ex.Message);
             }
         }
-        public static async void Rodar(string cep, StreamWriter arquivo)
+        public static async void Rodar(string cep)
         {
             try
             {
                 HttpClient cliente = new HttpClient();
                 var resultado = await cliente.GetStringAsync("https://viacep.com.br/ws/" + cep + "/json/");
-                ViaCep resultadojson = JsonConvert.DeserializeObject<ViaCep>(resultado);
+                campo = JsonConvert.DeserializeObject<ViaCep>(resultado);
                 mensagemConsole();
-                imprimeElementos(resultadojson, arquivo);
             }
             catch (Exception ex)
             {
@@ -53,66 +53,29 @@ namespace ConsoleMenu.ApiViaCEP
             Visor.criaLinha();
             Console.WriteLine("Quais informações deseja resgatar?");
         }
-        public static void imprimeElementos(ViaCep campo, StreamWriter arquivo)
+        public static StringBuilder imprimeElementos(string cep)
         {
+            Rodar(cep);
             string? validador = Console.ReadLine();
-            Console.Clear();
-            Visor.criaLinha();
-            Console.WriteLine($"Cep: {campo.Cep}");
-            arquivo.WriteLine($"=> Cep: {campo.Cep}");
-            Visor.criaLinha();
-            if (validador.Contains('0'))
-            {
-                validador = "123456789";
-            }
-            if (validador.Contains('1'))
-            {
-                Console.WriteLine($"Logradouro: {campo.Logradouro}");
-                arquivo.WriteLine($"Logradouro: {campo.Logradouro}");
-            }
-            if (validador.Contains('2'))
-            {
-                Console.WriteLine($"Complemento: {campo.Complemento}");
-                arquivo.WriteLine($"Complemento: {campo.Complemento}");
-            }
-            if (validador.Contains('3'))
-            {
-                Console.WriteLine($"Bairro: {campo.Bairro}");
-                arquivo.WriteLine($"Bairro: {campo.Bairro}");
-            }
-            if (validador.Contains('4'))
-            {
-                Console.WriteLine($"Localidade: {campo.Localidade}");
-                arquivo.WriteLine($"Localidade: {campo.Localidade}");
-            }
-            if (validador.Contains('5'))
-            {
-                Console.WriteLine($"UF: {campo.UF}");
-                arquivo.WriteLine($"UF: {campo.UF}");
-            }
-            if (validador.Contains('6'))
-            {
-                Console.WriteLine($"IBGE: {campo.IBGE}");
-                arquivo.WriteLine($"IBGE: {campo.IBGE}");
-            }
-            if (validador.Contains('7'))
-            {
-                Console.WriteLine($"GIA: {campo.GIA}");
-                arquivo.WriteLine($"GIA: {campo.GIA}");
-            }
-            if (validador.Contains('8'))
-            {
-                Console.WriteLine($"DDD: {campo.DDD}");
-                arquivo.WriteLine($"DDD: {campo.DDD}");
-            }
-            if (validador.Contains('9'))
-            {
-                Console.WriteLine($"Siafi: {campo.Siafi}");
-                arquivo.WriteLine($"Siafi: {campo.Siafi}");
-            }
-            Visor.criaLinha();
-            arquivo.Close();
-            Console.WriteLine("Pressione qualquer tecla para continuar");
+            StringBuilder mensagem = new StringBuilder();
+            // Console.Clear();
+            // Visor.criaLinha();
+            mensagem.Append($"=> Cep: {campo.Cep}\n");
+            // Visor.criaLinha();
+            if (validador.Contains('0')) validador = "123456789";
+            if (validador.Contains('1')) mensagem.Append($"Logradouro: {campo.Logradouro}\n");
+            if (validador.Contains('2')) mensagem.Append($"Complemento: {campo.Complemento}\n");
+            if (validador.Contains('3')) mensagem.Append($"Bairro: {campo.Bairro}\n");
+            if (validador.Contains('4')) mensagem.Append($"Localidade: {campo.Localidade}\n");
+            if (validador.Contains('5')) mensagem.Append($"UF: {campo.UF}\n");
+            if (validador.Contains('6')) mensagem.Append($"IBGE: {campo.IBGE}\n");
+            if (validador.Contains('7')) mensagem.Append($"GIA: {campo.GIA}\n");
+            if (validador.Contains('8')) mensagem.Append($"DDD: {campo.DDD}\n");
+            if (validador.Contains('9')) mensagem.Append($"Siafi: {campo.Siafi}\n");
+            // Visor.criaLinha();
+
+            // Console.WriteLine("Pressione qualquer tecla para continuar");
+            return mensagem;
         }
     }
 }

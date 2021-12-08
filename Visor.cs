@@ -56,8 +56,8 @@ namespace ConsoleMenu
                         insereCep();
                         break;
                     case "6":
-                        Environment.Exit(0);
-                        break;
+                        // Environment.Exit(0);
+                        return;
                     default:
                         retornarMenu("Escolha uma opção valida.", true);
                         Opcoes();
@@ -141,12 +141,13 @@ namespace ConsoleMenu
             if (File.Exists(path + arquivoEscolhido))
                 Opcoes();
             else
+            {
                 Console.Clear();
-            arquivoEscolhido = @"\Teste.txt";
-            if (retornarMenu("O arquivo não existe, deseja criá-lo? <s/n>"))
-                Acao("1");
-            else
-                Opcoes();
+                if (retornarMenu("O arquivo não existe, deseja criá-lo? <s/n>"))
+                    Acao("1");
+                else
+                    Opcoes();
+            }
         }
         static void insereCep()
         {
@@ -181,12 +182,18 @@ namespace ConsoleMenu
         {
             if (File.Exists(path + arquivoEscolhido))
             {
-                var valor = new StreamWriter(path + arquivoEscolhido, append: true);
                 Console.Write("Digite o Cep: ");
                 string? cep = Console.ReadLine();
                 if (cep != string.Empty && cep.Length == 8)
                 {
-                    ApiViaCEP.ApiViaCEP.Chama(cep, valor);
+                    var arquivo = new StreamWriter(path + arquivoEscolhido, append: true);
+                    StringBuilder mensagem = ApiViaCEP.ApiViaCEP.imprimeElementos(cep);
+                    criaLinha();
+                    Console.Write(mensagem);
+                    arquivo.Write(mensagem);
+                    arquivo.Close();
+                    retornarMenu("", true);
+                    Opcoes();
                 }
                 else
                 {
@@ -207,12 +214,18 @@ namespace ConsoleMenu
         {
             if (File.Exists(path + arquivoEscolhido))
             {
-                var valor = new StreamWriter(path + arquivoEscolhido, append: true);
                 int[] arrayCeps = new int[10] { 58410140, 58400440, 69550061, 85815210, 69313265, 57307004, 64013100,
                     97577470, 64050080, 78058150};
                 Random random = new Random();
                 int cepAleatorio = arrayCeps[random.Next(arrayCeps.Length)];
-                ApiViaCEP.ApiViaCEP.Chama(cepAleatorio.ToString(), valor);
+                var arquivo = new StreamWriter(path + arquivoEscolhido, append: true);
+                StringBuilder mensagem = ApiViaCEP.ApiViaCEP.imprimeElementos(cepAleatorio.ToString());
+                criaLinha();
+                Console.Write(mensagem);
+                arquivo.Write(mensagem);
+                arquivo.Close();
+                retornarMenu("", true);
+                Opcoes();
             }
             else
             {
