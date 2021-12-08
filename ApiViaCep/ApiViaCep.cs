@@ -58,10 +58,7 @@ namespace ConsoleMenu.ApiViaCEP
             Rodar(cep);
             string? validador = Console.ReadLine();
             StringBuilder mensagem = new StringBuilder();
-            // Console.Clear();
-            // Visor.criaLinha();
             mensagem.Append($"=> Cep: {campo.Cep}\n");
-            // Visor.criaLinha();
             if (validador.Contains('0')) validador = "123456789";
             if (validador.Contains('1')) mensagem.Append($"Logradouro: {campo.Logradouro}\n");
             if (validador.Contains('2')) mensagem.Append($"Complemento: {campo.Complemento}\n");
@@ -72,9 +69,6 @@ namespace ConsoleMenu.ApiViaCEP
             if (validador.Contains('7')) mensagem.Append($"GIA: {campo.GIA}\n");
             if (validador.Contains('8')) mensagem.Append($"DDD: {campo.DDD}\n");
             if (validador.Contains('9')) mensagem.Append($"Siafi: {campo.Siafi}\n");
-            // Visor.criaLinha();
-
-            // Console.WriteLine("Pressione qualquer tecla para continuar");
             return mensagem;
         }
     }
